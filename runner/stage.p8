@@ -5,6 +5,10 @@ _stage = {
   -- flowers and fill
   decorations = {},
 
+  -- parallax!
+  bg_layer_1 = {},
+  bg_layer_2 = {},
+
   ground_top_left_corner_spr=24,
   ground_top_center_spr=25,
   ground_top_right_corner_spr=26,
@@ -17,19 +21,24 @@ _stage = {
   flowers = {8,9,10, 44},
 
   scroll_speed = 0.5,
+  bg_1_scroll_ratio = 0.1,
+  bg_2_scroll_ratio = 0.01,
 
   prev_tile_y = 14,
   curr_tile_y = 14,
   just_changed = false,
 
-  min_tile_y = 6,
+  min_tile_y = 12,
   max_tile_y = 15,
 
   rightmost_tile_x = 0,
+
+  min_new_flag_time = 10,
+  new_flag_timer = 10,
 }
 
 function _stage:foreach_actor(fn)
-  for actors in all({self.ground, self.decorations}) do
+  for actors in all({self.bg_layer_2, self.bg_layer_1, self.ground, self.decorations}) do
     for actor in all(actors) do fn(actor) end end
 end
 
@@ -39,6 +48,8 @@ function _stage:filter_actors()
   end
   filter(self.ground, fn)
   filter(self.decorations, fn)
+  filter(self.bg_layer_1, fn)
+  filter(self.bg_layer_2, fn)
 end
 
 function _stage:set_scroll_speed(speed)
@@ -52,6 +63,22 @@ function _stage:create_actor(y, spr)
       vel=_vec2(-self.scroll_speed, 0),
       spr=spr,
   })
+end
+
+function _stage:create_flag(scroll_speed)
+  local y = interp1d(rnd01(), 10, 50)
+  local size = flr(interp1d(rnd01(), 3, 7))
+  local width = flr(interp1d(rnd01(), 3, 7))
+  local possible_colors = {
+     _dark_blue,
+     _dark_purple,
+     _dark_green,
+     _dark_grey,
+     _red,
+     _orange,
+  }
+  local color = rnd_choose(possible_colors)
+  return _flag({pos = _vec2(self.rightmost_tile_x, y), size = size, color = color, width=width, vel=_vec2(-scroll_speed, 0)})
 end
 
 function _stage:get_top_spr()
@@ -126,12 +153,18 @@ function _stage:generate_new_tiles()
     add(self.decorations, self:create_actor(flower_y, flower_spr))
   end
 
+  self.new_flag_timer = max(self.new_flag_timer - 1, 0)
+  if self.new_flag_timer == 0 and rndbool(0.1) then
+    add(self.bg_layer_1, self:create_flag(self.scroll_speed*self.bg_1_scroll_ratio))
+    self.new_flag_timer = self.min_new_flag_time
+  end
+
   self.rightmost_tile_x += _spr_width
   self.prev_tile_y = self.curr_tile_y
 end
 
 function _stage:draw()
-  self:foreach_actor(_actor.draw)
+  self:foreach_actor(function(x) x:draw() end)
   -- foreach(self.ground, function(a) a:aabb():draw(_red) end)
 end
 
@@ -142,6 +175,6 @@ function _stage:update()
   while self.rightmost_tile_x <= _width do
     self:generate_new_tiles()
   end
-  self:foreach_actor(_actor.update)
+  self:foreach_actor(function(x) x:update() end)
   self:filter_actors()
 end

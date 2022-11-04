@@ -5,7 +5,9 @@ flag_head_sprite = 27
 flag_body_sprite = 43
 
 function _flag:__call(params)
-  return inherit(_flag, _rope(params))
+  local instance = inherit(_flag, _rope(params))
+  instance.vel = params.vel or _vec2(0,0)
+  return instance
 end
 
 function _flag:draw()
@@ -17,8 +19,14 @@ function _flag:draw()
 end
 
 function _flag:update()
+  self:translate(self.vel)
   self.acc = _wind:get_acc() + gravity
   self.parent.update(self)
+end
+
+function _flag:translate(delta_pos)
+  self.pos += delta_pos
+  self.parent.translate(self, delta_pos)
 end
 
 
