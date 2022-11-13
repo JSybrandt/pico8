@@ -5,9 +5,6 @@ _stage = {
   -- flowers and fill
   decorations = {},
 
-  -- parallax!
-  bg_layer_1 = {},
-  bg_layer_2 = {},
 
   ground_top_left_corner_spr=24,
   ground_top_center_spr=25,
@@ -21,8 +18,15 @@ _stage = {
   flowers = {8,9,10, 44},
 
   scroll_speed = 0.5,
-  bg_1_scroll_ratio = 0.1,
-  bg_2_scroll_ratio = 0.01,
+
+  -- parallax!
+  flags = {},
+  flag_scroll_ratio = 0.1,
+  max_flags = 2,
+  mountains = {},
+  --mountain_scroll_ratio = 0.05,
+  mountain_scroll_ratio = 0.5,
+  max_mountains = 4,
 
   prev_tile_y = 14,
   curr_tile_y = 14,
@@ -35,10 +39,14 @@ _stage = {
 
   min_new_flag_time = 10,
   new_flag_timer = 10,
+
+  min_new_mountain_time = 10,
+  new_mountain_timer = 10,
 }
 
 function _stage:foreach_actor(fn)
-  for actors in all({self.bg_layer_2, self.bg_layer_1, self.ground, self.decorations}) do
+  for actors in all({self.mountains, self.flags,
+                     self.ground, self.decorations}) do
     for actor in all(actors) do fn(actor) end end
 end
 
@@ -48,8 +56,8 @@ function _stage:filter_actors()
   end
   filter(self.ground, fn)
   filter(self.decorations, fn)
-  filter(self.bg_layer_1, fn)
-  filter(self.bg_layer_2, fn)
+  filter(self.flags, fn)
+  filter(self.mountains, fn)
 end
 
 function _stage:set_scroll_speed(speed)
@@ -65,10 +73,20 @@ function _stage:create_actor(y, spr)
   })
 end
 
-function _stage:create_flag(scroll_speed)
-  local y = interp1d(rnd01(), 10, 50)
-  local size = flr(interp1d(rnd01(), 3, 7))
-  local width = flr(interp1d(rnd01(), 3, 7))
+function _stage:maybe_create_flag()
+  self.new_flag_timer = max(self.new_flag_timer - 1, 0)
+  if self.new_flag_timer ~= 0 then return end
+  if #self.flags >= self.max_flags then return end
+  if not rndbool(0.1) then return end
+  self.new_flag_timer = self.min_new_flag_time
+
+
+  local y = interp1d(rnd01(), 10, 80)
+  local size = flr(interp1d(rnd01(), 3, 10))
+  local width = flr(interp1d(rnd01(), 3, 10))
+  local pos = _vec2(self.rightmost_tile_x, y)
+  local scroll_speed = self.scroll_speed * self.flag_scroll_ratio
+  local vel = _vec2(-scroll_speed, 0)
   local possible_colors = {
      _dark_blue,
      _dark_purple,
@@ -78,7 +96,29 @@ function _stage:create_flag(scroll_speed)
      _orange,
   }
   local color = rnd_choose(possible_colors)
-  return _flag({pos = _vec2(self.rightmost_tile_x, y), size = size, color = color, width=width, vel=_vec2(-scroll_speed, 0)})
+  local flag = _flag({pos = pos, size = size, color = color,
+                      width=width, vel = vel})
+  add(self.flags, flag)
+end
+
+function _stage:maybe_create_mountain()
+  self.new_mountain_timer = max(self.new_mountain_timer - 1, 0)
+  if #self.mountains >= self.max_mountains then return end
+  if self.new_mountain_timer ~= 0 then return end
+  if not rndbool(0.1) then return end
+  self.new_mountain_timer = self.min_new_mountain_time
+
+  local y = interp1d(rnd01(), 40, 60)
+  local x = self.rightmost_tile_x + (_height-y)
+  local scroll_speed = self.scroll_speed * self.mountain_scroll_ratio
+  local vel = _vec2(-scroll_speed, 0)
+  local mountain = _mountain({pos=_vec2(x,y), vel=vel})
+  if rndbool() then
+    add(self.mountains, mountain)
+  else
+    -- stops all the mountains from stacking the same way
+    add(self.mountain, mountain, 0)
+  end
 end
 
 function _stage:get_top_spr()
@@ -153,11 +193,8 @@ function _stage:generate_new_tiles()
     add(self.decorations, self:create_actor(flower_y, flower_spr))
   end
 
-  self.new_flag_timer = max(self.new_flag_timer - 1, 0)
-  if self.new_flag_timer == 0 and rndbool(0.1) then
-    add(self.bg_layer_1, self:create_flag(self.scroll_speed*self.bg_1_scroll_ratio))
-    self.new_flag_timer = self.min_new_flag_time
-  end
+  self:maybe_create_flag()
+  self:maybe_create_mountain()
 
   self.rightmost_tile_x += _spr_width
   self.prev_tile_y = self.curr_tile_y
