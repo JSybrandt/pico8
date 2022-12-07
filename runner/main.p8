@@ -2,6 +2,7 @@
 
 function _init()
   dbg_init()
+
   _wind:init()
   _clouds:init()
   gravity = _vec2(0, 0.25)
@@ -18,6 +19,7 @@ end
 count = 0
 function _draw()
   cls(_blue)
+  trifill(10,35,50,90,100,75,_orange)
   _clouds:draw()
   _stage:draw()
   -- foreach(flags, _flag.draw)
