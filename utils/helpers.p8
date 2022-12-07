@@ -116,3 +116,27 @@ function merge(a, b)
   end
   return c
 end
+
+function insertion_sort(tbl, key_fn)
+  local keys = {}
+  for i = 1,#tbl do
+    if key_fn then
+      keys[i]=key_fn(tbl[i])
+    else
+      keys[i]=tbl[i]
+    end
+  end
+  for i = 1,#tbl-1 do
+    min_idx = i
+    for j = i+1, #tbl do
+      if keys[min_idx] > keys[j] then
+        min_idx = j
+      end
+    end
+    if i != min_idx then
+      tbl[i], tbl[min_idx] = tbl[min_idx], tbl[i]
+      keys[i], keys[min_idx] = keys[min_iex], keys[i]
+    end
+  end
+  return tbl
+end
