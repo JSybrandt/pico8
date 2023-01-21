@@ -19,11 +19,11 @@ end
 count = 0
 function _draw()
   cls(_blue)
-  trifill(10,35,50,90,100,75,_orange)
-  _clouds:draw()
+  _clouds:draw(1)
   _stage:draw()
   -- foreach(flags, _flag.draw)
   _player:draw()
+  _clouds:draw(2)
 
 end
 

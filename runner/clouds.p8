@@ -14,10 +14,18 @@ function _clouds:rnd_size()
   return interp1d(rnd01(),self.min_size,self.max_size)
 end
 
+function _clouds:rndlayer()
+  if rndbool() then
+    return 1
+  else
+    return 2
+  end
+end
+
 function _clouds:maybe_new(x)
   local x = x or self.max_size + _width
   if rndbool(self.new_cloud_prob) then
-    add(self.particles, {x=x, y=self:rnd_y(), size=self:rnd_size()})
+    add(self.particles, {x=x, y=self:rnd_y(), size=self:rnd_size(), layer=self.rndlayer()})
   end
 end
 
@@ -32,16 +40,18 @@ end
 function _clouds:update()
   self:maybe_new()
   for particle in all(self.particles) do
-    if rndbool(_wind:get_amt()/3) then
+    if rndbool(_wind:get_amt()/2) then
       particle.x -= 1
     end
   end
   filter(self.particles, function(p) return p.x+p.size>0 end)
 end
 
-function _clouds:draw()
+function _clouds:draw(layer)
   for particle in all(self.particles) do
-    circfill(particle.x+1, particle.y+1, particle.size, _light_grey)
-    circfill(particle.x, particle.y, particle.size, _white)
+    if not layer or layer == particle.layer then
+      circfill(particle.x+1, particle.y+1, particle.size, _light_grey)
+      circfill(particle.x, particle.y, particle.size, _white)
+    end
   end
 end

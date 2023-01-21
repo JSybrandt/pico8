@@ -21,11 +21,11 @@ _stage = {
 
   -- parallax!
   flags = {},
-  flag_scroll_ratio = 0.1,
+  flag_scroll_speed = 0.25,
   max_flags = 2,
   mountains = {},
   --mountain_scroll_ratio = 0.05,
-  mountain_scroll_ratio = 0.5,
+  mountain_scroll_speed = 0.25,
   max_mountains = 4,
 
   prev_tile_y = 14,
@@ -52,6 +52,7 @@ end
 
 function _stage:filter_actors()
   local fn = function(a)
+    local width = a.width*_spr_width or -_spr_width
     return a.pos.x > -_spr_width
   end
   filter(self.ground, fn)
@@ -85,8 +86,7 @@ function _stage:maybe_create_flag()
   local size = flr(interp1d(rnd01(), 3, 10))
   local width = flr(interp1d(rnd01(), 3, 10))
   local pos = _vec2(self.rightmost_tile_x, y)
-  local scroll_speed = self.scroll_speed * self.flag_scroll_ratio
-  local vel = _vec2(-scroll_speed, 0)
+  local vel = _vec2(-self.flag_scroll_speed, 0)
   local possible_colors = {
      _dark_blue,
      _dark_purple,
@@ -105,14 +105,10 @@ function _stage:maybe_create_mountain()
   self.new_mountain_timer = max(self.new_mountain_timer - 1, 0)
   if #self.mountains >= self.max_mountains then return end
   if self.new_mountain_timer ~= 0 then return end
-  if not rndbool(0.1) then return end
+  if not rndbool(0.2) then return end
   self.new_mountain_timer = self.min_new_mountain_time
 
-  local y = interp1d(rnd01(), 40, 60)
-  local x = self.rightmost_tile_x + (_height-y)
-  local scroll_speed = self.scroll_speed * self.mountain_scroll_ratio
-  local vel = _vec2(-scroll_speed, 0)
-  local mountain = _mountain({pos=_vec2(x,y), vel=vel})
+  local mountain = _mountain({vel=_vec2(-self.mountain_scroll_speed, 0)})
   if rndbool() then
     add(self.mountains, mountain)
   else
