@@ -53,7 +53,7 @@ end
 function _stage:filter_actors()
   local fn = function(a)
     local width = a.width*_spr_width or -_spr_width
-    return a.pos.x > -_spr_width
+    return a.pos.x > -_width
   end
   filter(self.ground, fn)
   filter(self.decorations, fn)
