@@ -1,52 +1,35 @@
+-- actor --
+
 _actor={}
 setmetatable(_actor, _actor)
 
 function _actor:__call(params)
   local params = params or {}
-
-  local instance = inherit({}, _actor)
-  instance.pos = params.pos or _vec2(0, 0)
-  instance.vel = params.vel or _vec2(0, 0)
-  instance.acc = params.acc or _vec2(0, 0)
-  instance.spr = params.spr or 0
-  instance.width = params.width or 1
-  instance.height = params.height or 1
-  instance.flip_x = params.flip_x or false
-  instance.flip_y = params.flip_y or false
-  instance.visible = params.visible or true
-  instance.age = 0
-  instance.lifespan = params.lifespan or 0
-  assert(instance.lifespan >= 0)
-  instance.alive = true
-  return instance
+  local a = inherit({}, _actor)
+  a.pos = params.pos or _v2()
+  a.vel = params.vel or _v2()
+  a.acc = params.acc or _v2()
+  a.width = params.width or 0
+  a.height = params.height or 0
+  a.visible = params.visible or true
+  a.alive = params.alive or true
+  return a
 end
 
--- age in [0, 1] from alive to dead. if lifespan = 0, this is always 0.
-function _actor:age_frac()
-  if self.lifespan == 0 then return 0 end
-  return min(1, self.age / self.lifespan)
-end
-
+-- aabb centered at pos.
 function _actor:aabb()
-  return _aabb(
-    _vec2(self.pos.x, self.pos.y),
-    _vec2(_spr_width * self.width-1,
-          _spr_height * self.height -1))
+  return _aabb(_v2(self.pos.x-self.width/2, self.pos.y-self.height/2),
+               _v2(self.width-1, self.height-1))
 end
 
-function _actor:draw()
+function _actor:draw(params)
+  local params = params or {}
   if not self.visible then return end
-  spr(self.spr, self.pos.x, self.pos.y, self.width,
-      self.height, self.flip_x, self.flip_y)
+  if _debugging then self:aabb():draw(params.dbg_color) end
 end
 
 function _actor:update()
   if not self.alive then return end
-  self.age += 1
-  if self.lifespan > 0 and self.age >= self.lifespan then
-    self.alive = false
-    return
-  end
   self.pos += self.vel
   self.vel += self.acc
 end

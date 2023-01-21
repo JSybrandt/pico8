@@ -1,13 +1,12 @@
-_debug = true
-_logfile = "logs.txt"
+-- constants --
 
 -- screen
 _width = 128
 _height = 128
 
 -- sprites
-_spr_width = 8
-_spr_height = 8
+_spr_px_wide = 8
+_spr_px_high = 8
 
 -- colors
 _black = 0
@@ -35,12 +34,9 @@ _down = 3
 _button_o = 4
 _button_x = 5
 
--- utils
-_tick = 0
-
--- text
-_text_width = 4
-_text_height = 5
-
 -- math
 _eps = 0.001
+
+-- data
+_min_num = 0x8000.0000
+_max_num = 0x7fff.ffff

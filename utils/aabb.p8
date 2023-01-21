@@ -20,18 +20,11 @@ end
 
 function _aabb:left() return self.pos.x end
 function _aabb:top() return self.pos.y end
-function _aabb:bottom()
-  return self.pos.y + self.size.y
-end
-function _aabb:right()
-  return self.pos.x + self.size.x
-end
+function _aabb:bottom() return self.pos.y + self.size.y end
+function _aabb:right() return self.pos.x + self.size.x end
 function _aabb:width() return self.size.x end
 function _aabb:height() return self.size.y end
-
-function _aabb:center()
-  return self.pos + self.size / 2
-end
+function _aabb:center() return self.pos + self.size / 2 end
 
 function _aabb:corners()
   return {_vec2(self:left(), self:top()),
