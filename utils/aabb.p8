@@ -104,6 +104,16 @@ function _aabb:draw(color)
   rect(self:left(), self:top(), self:right(), self:bottom(), color)
 end
 
+function _aabb:draw_fill(color)
+  local color = color or _green
+  rectfill(self:left(), self:top(), self:right(), self:bottom(), color)
+end
+
+function _aabb:oval_fill(color)
+  local color = color or _green
+  ovalfill(self:left(), self:top(), self:right(), self:bottom(), color)
+end
+
 function _aabb:__tostring()
   return "aabb["..self:left()..", "..self:top()..", "
                 ..self:right()..", "..self:bottom().."]"

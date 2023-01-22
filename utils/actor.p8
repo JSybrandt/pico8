@@ -107,3 +107,5 @@ function _actor:aabb_separate(other_aabb, callbacks)
     self.pos.y -= intersection:height()
   end
 end
+
+function is_alive(a) return a.alive end

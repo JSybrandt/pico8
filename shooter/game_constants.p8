@@ -11,3 +11,5 @@ _player_shoot_loffset = -2
 _player_shoot_roffset = 1
 
 _enemy_spr_1 = 2
+_enemy_bullet_vel = _v2(0, 1.5)
+_enemy_bullet_color = _red

@@ -12,7 +12,7 @@ end
 
 function _bullet:draw()
   if not self.visible then return end
-  pset(self.pos.x, self.pos.y, self.color)
+  self:aabb():draw_fill(self.color)
 end
 
 function _bullet:update()

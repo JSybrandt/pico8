@@ -27,7 +27,7 @@ end
 
 -- only the center
 function _player:aabb()
-  return _aabb(_v2(self.pos.x-1, self.pos.y-1), _v2(1, 1))
+  return _aabb(_v2(self.pos.x-2, self.pos.y-2), _v2(3, 3))
 end
 
 function _player:update()
@@ -39,16 +39,21 @@ function _player:update()
 
   self.spawn_bullet_periodic:update()
   foreach(self.bullets, _bullet.update)
-  filter(self.bullets, function(b) return b.alive end)
+  filter(self.bullets, is_alive)
 end
 
 function _player:draw()
   _spr_actor.draw(self)
-  self:aabb():draw(self:color())
+  self:aabb():oval_fill(self:color())
   foreach(self.bullets, _bullet.draw)
 end
 
 function _player:color()
   if self.idx == 0 then return _blue end;
-  if self.idx == 1 then return _red end;
+  if self.idx == 1 then return _green end;
+end
+
+function _player:damage()
+  self.alive = false
+  self.visible = false
 end
