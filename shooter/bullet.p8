@@ -2,6 +2,9 @@ _bullet = {}
 setmetatable(_bullet, _bullet)
 
 function _bullet:__call(params)
+  local params = params or {}
+  params.width = params.width or 1
+  params.height = params.height or 1
   local b = inherit(_bullet, _actor(params))
   b.color = params.color or _white
   return b
@@ -14,10 +17,7 @@ end
 
 function _bullet:update()
   _actor.update(self)
-  if self.pos.x < 0 or
-     self.pos.x > _width or
-     self.pos.y < 0 or
-     self.pos.y > _height then
+  if not self:is_on_screen() then
      self.alive = false
      self.visible = false
    end

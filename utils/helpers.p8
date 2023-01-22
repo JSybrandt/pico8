@@ -29,7 +29,7 @@ end
 
 function read_unit_input(player_idx)
   player_idx = player_idx or 0
-  local input = _vec2(0, 0)
+  local input = _v2()
   if btn(_up, player_idx) then input.y -= 1 end
   if btn(_down, player_idx) then input.y += 1 end
   if btn(_left, player_idx) then input.x -= 1 end
@@ -77,4 +77,8 @@ function sort(tbl, key_fn)
     end
   end
   return tbl
+end
+
+function screen_aabb()
+  return _aabb(_v2(), _v2(_width, _height))
 end

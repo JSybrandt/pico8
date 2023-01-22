@@ -34,6 +34,18 @@ function _actor:update()
   self.vel += self.acc
 end
 
+function _actor:is_on_screen()
+  return screen_aabb():overlaps(_actor.aabb(self))
+end
+
+function _actor:keep_on_screen()
+  local bb = _actor.aabb(self)
+  if bb:left() < 0 then self.pos.x -= bb:left() end
+  if bb:right() > _width then self.pos.x -= bb:right() - _width end
+  if bb:top() < 0 then self.pos.y -= bb:top() end
+  if bb:bottom() > _height then self.pos.y -= bb:bottom() - _height end
+end
+
 function _actor:aabb_separate_x(other_aabb, callbacks)
   local callbacks = callbacks or {}
   local actor_aabb = self:aabb()

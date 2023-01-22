@@ -3,11 +3,6 @@ _aabb={}
 setmetatable(_aabb, _aabb)
 
 function  _aabb:__call(pos, size)
-  assert(pos)
-  assert(pos.x)
-  assert(pos.y)
-  assert(size.x >= 0)
-  assert(size.y >= 0)
   local instance = inherit({}, _aabb)
   instance.pos = pos
   instance.size = size

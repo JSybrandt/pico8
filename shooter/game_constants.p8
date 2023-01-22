@@ -9,3 +9,5 @@ _player_bullet_vel = _v2(0, -3)
 _player_shoot_interval = 3
 _player_shoot_loffset = -2
 _player_shoot_roffset = 1
+
+_enemy_spr_1 = 2
