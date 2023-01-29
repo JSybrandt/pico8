@@ -6,33 +6,13 @@ function _init()
   add(players, _player(1))
 
   steps = {}
-  add(steps, {
-      cmd = _traj_step_jump,
-      pos = _v2(_width*0.2, -10),
-  })
-  add(steps, {
-      cmd = _traj_step_move,
-      pos = _v2(_width/2, _height/2),
-      speed = 0.5,
-  })
-  add(steps, {
-      cmd = _traj_step_wait,
-      count = 60,
-  })
-  add(steps, {
-      cmd = _traj_step_move,
-      pos = _v2(10, _height*0.9),
-      speed = 1,
-  })
-  add(steps, {
-      cmd = _traj_step_wait,
-      count = 20,
-  })
-  add(steps, {
-      cmd = _traj_step_move,
-      pos = _v2(10, _height*1.2),
-      speed = 1,
-  })
+  add(steps, { cmd=_traj_step_jump, pos=_v2(12,-4) })
+  add(steps, { cmd=_traj_step_move, pos=_v2(16,20), speed=5.0 })
+  add(steps, { cmd=_traj_step_move, pos=_v2(44,28), speed=5.0 })
+  add(steps, { cmd=_traj_step_move, pos=_v2(80,24), speed=5.0 })
+  add(steps, { cmd=_traj_step_move, pos=_v2(88,8), speed=5.0 })
+  add(steps, { cmd=_traj_step_move, pos=_v2(112,-4), speed=5.0 })
+
   enemies = {}
   enemy_bullets = {}
 end
