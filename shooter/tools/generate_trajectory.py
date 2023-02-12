@@ -62,10 +62,11 @@ class Actor:
     def draw(self):
         if len(self.app.steps) == 0:
             return
-        left = self.pos[0] - self.radius
-        right = self.pos[0] + self.radius
-        top = self.pos[1] - self.radius
-        bottom = self.pos[1] + self.radius
+        x, y = self.app.to_canvas_px(self.pos)
+        left = x - self.radius
+        right = x + self.radius
+        top = y - self.radius
+        bottom = y + self.radius
         self.app.canvas.create_oval(left, top, right, bottom, fill="blue")
 
     def next_step(self):
@@ -78,21 +79,19 @@ class Actor:
         cmd = self.app.steps[self.step_idx]
         self.step_counter += 1
         if isinstance(cmd, JumpStep):
-            x, y = self.app.to_canvas_px(cmd.pos)
-            self.pos[0] = x
-            self.pos[1] = y
+            self.pos[0] = cmd.pos[0]
+            self.pos[1] = cmd.pos[1]
             self.next_step()
         elif isinstance(cmd, WaitStep):
             if self.step_counter >= cmd.count:
                 self.next_step()
         elif isinstance(cmd, MoveStep):
-            x, y = self.app.to_canvas_px(cmd.pos)
-            d_x = x - self.pos[0]
-            d_y = y - self.pos[1]
+            d_x = cmd.pos[0] - self.pos[0]
+            d_y = cmd.pos[1] - self.pos[1]
             d_mag = math.sqrt(d_x ** 2 + d_y**2)
             if d_mag < cmd.speed:
-                self.pos[0] = x
-                self.pos[1] = y
+                self.pos[0] = cmd.pos[0]
+                self.pos[1] = cmd.pos[1]
                 self.next_step()
             else:
                 self.pos[0] += d_x / d_mag * cmd.speed
@@ -133,13 +132,13 @@ class App(tk.Tk):
         self.speed_label.grid(row=2, column=2)
         self.speed_entry = tk.Entry(self, width=15)
         self.speed_entry.grid(row=3, column=2)
-        self.speed_entry.insert(0, "5")
+        self.speed_entry.insert(0, "1")
 
         self.wait_label = tk.Label(self, text="Wait Time:")
         self.wait_label.grid(row=4, column=2)
         self.wait_entry = tk.Entry(self, width=15)
         self.wait_entry.grid(row=5, column=2)
-        self.wait_entry.insert(0, "10")
+        self.wait_entry.insert(0, "15")
         self.wait_button = tk.Button(self, text="Wait", command=self.wait_button_fn)
         self.wait_button.grid(row=6, column=2)
 

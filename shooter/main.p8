@@ -5,14 +5,17 @@ function _init()
   add(players, _player(0))
   add(players, _player(1))
 
+  -- test by copying steps here
   steps = {}
-  add(steps, { cmd=_traj_step_jump, pos=_v2(12,-4) })
-  add(steps, { cmd=_traj_step_move, pos=_v2(16,20), speed=5.0 })
-  add(steps, { cmd=_traj_step_move, pos=_v2(44,28), speed=5.0 })
-  add(steps, { cmd=_traj_step_move, pos=_v2(80,24), speed=5.0 })
-  add(steps, { cmd=_traj_step_move, pos=_v2(88,8), speed=5.0 })
-  add(steps, { cmd=_traj_step_move, pos=_v2(112,-4), speed=5.0 })
-
+  add(steps, { cmd=_traj_step_jump, pos=_v2(-4,24) })
+  add(steps, { cmd=_traj_step_move, pos=_v2(28,24), speed=1.0 })
+  add(steps, { cmd=_traj_step_move, pos=_v2(28,44), speed=1.0 })
+  add(steps, { cmd=_traj_step_move, pos=_v2(56,44), speed=1.0 })
+  add(steps, { cmd=_traj_step_move, pos=_v2(64,36), speed=1.0 })
+  add(steps, { cmd=_traj_step_move, pos=_v2(72,28), speed=1.0 })
+  add(steps, { cmd=_traj_step_move, pos=_v2(88,44), speed=1.0 })
+  add(steps, { cmd=_traj_step_move, pos=_v2(116,32), speed=1.0 })
+  add(steps, { cmd=_traj_step_move, pos=_v2(136,24), speed=1.0 })
   enemies = {}
   enemy_bullets = {}
 end
@@ -25,7 +28,7 @@ function _draw()
 end
 
 function _update()
-  if t() % 2 == 0 then
+  if t() % 1 == 0 then
     add(enemies, _enemy({
       steps = steps,
       health = 10,
