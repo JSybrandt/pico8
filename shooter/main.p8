@@ -5,19 +5,22 @@ function _init()
   add(players, _player(0))
   add(players, _player(1))
 
-  -- test by copying steps here
-  steps = {}
-  add(steps, { cmd=_traj_step_jump, pos=_v2(-4,24) })
-  add(steps, { cmd=_traj_step_move, pos=_v2(28,24), speed=1.0 })
-  add(steps, { cmd=_traj_step_move, pos=_v2(28,44), speed=1.0 })
-  add(steps, { cmd=_traj_step_move, pos=_v2(56,44), speed=1.0 })
-  add(steps, { cmd=_traj_step_move, pos=_v2(64,36), speed=1.0 })
-  add(steps, { cmd=_traj_step_move, pos=_v2(72,28), speed=1.0 })
-  add(steps, { cmd=_traj_step_move, pos=_v2(88,44), speed=1.0 })
-  add(steps, { cmd=_traj_step_move, pos=_v2(116,32), speed=1.0 })
-  add(steps, { cmd=_traj_step_move, pos=_v2(136,24), speed=1.0 })
+  -- load all of the trajectories that we exported.
+  trajectories = {}
+  for name, serialized_traj in pairs(serialized_trajectories) do
+      trajectories[name] = parse_trajectory_steps(serialized_traj)
+  end
+  traj_names = {}
+  for name, _ in pairs(trajectories) do
+      add(traj_names, name)
+  end
+
   enemies = {}
   enemy_bullets = {}
+end
+
+function rand_traj()
+    return trajectories[rnd(traj_names)]
 end
 
 function _draw()
@@ -30,7 +33,7 @@ end
 function _update()
   if t() % 1 == 0 then
     add(enemies, _enemy({
-      steps = steps,
+      steps = rand_traj(),
       health = 10,
       bullets = enemy_bullets,
       shot_interval = 60,

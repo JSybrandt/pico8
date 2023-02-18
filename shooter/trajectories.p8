@@ -23,6 +23,30 @@ function _trajectory:__call(actor, steps)
   return t
 end
 
+function parse_step_string(step_tuple)
+    if step_tuple[1] == _traj_step_jump then
+        return {cmd = _traj_step_jump,
+                pos=_v2(step_tuple[2], step_tuple[3])}
+    elseif step_tuple[1] == _traj_step_move then
+        return {cmd = _traj_step_move,
+                pos=_v2(step_tuple[2], step_tuple[3]),
+                speed=step_tuple[4]}
+    elseif step_tuple[1] == _traj_step_wait then
+        return {cmd = _traj_step_wait, count = step_tuple[2]}
+    end
+    -- Invalid step action.
+    assert(false)
+end
+
+function parse_trajectory_steps(data_str)
+    steps = {}
+    for step_str in all(split(data_str, ";")) do
+        -- split the step_str and convert numbers.
+        add(steps, parse_step_string(split(step_str, ",", true)))
+    end
+    return steps
+end
+
 function _trajectory:update()
   if self:is_done() then return end
   self.curr_counter += 1
