@@ -108,4 +108,3 @@ function _actor:aabb_separate(other_aabb, callbacks)
   end
 end
 
-function is_alive(a) return a.alive end

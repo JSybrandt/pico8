@@ -94,3 +94,5 @@ end
 function screen_aabb()
   return _aabb(_v2(), _v2(_width, _height))
 end
+
+function is_alive(a) return a.alive end

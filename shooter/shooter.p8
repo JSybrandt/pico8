@@ -11,12 +11,13 @@ __lua__
 #include utils/actor.p8
 #include utils/spr_actor.p8
 
-#include tools/trajectory_export.p8
+#include tools/step_lists.p8
 
 #include game_constants.p8
 #include bullet.p8
 #include trajectories.p8
 #include enemy.p8
+#include waves.p8
 #include player.p8
 #include main.p8
 

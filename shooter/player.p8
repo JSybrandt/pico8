@@ -18,11 +18,9 @@ function _player:spawn_bullet()
   self.shoot_left = not self.shoot_left
   local x = self.pos.x + tern(self.shoot_left,
                               _player_shoot_loffset, _player_shoot_roffset)
-  add(self.bullets, _bullet({
-    pos = _v2(x, self.pos.y),
-    vel = _player_bullet_vel,
-    color = self:color(),
-  }))
+  add(self.bullets, _bullet({pos = _v2(x, self.pos.y),
+                             vel = _player_bullet_vel,
+                             color = self:color()}))
 end
 
 -- only the center
