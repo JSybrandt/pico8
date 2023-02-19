@@ -1,6 +1,7 @@
 pico-8 cartridge // http://www.pico-8.com
 version 38
 __lua__
+#include utils/debug.p8
 #include utils/constants.p8
 #include utils/v2.p8
 #include utils/rnd.p8

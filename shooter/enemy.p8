@@ -19,6 +19,7 @@ end
 function _enemy:update()
   self.trajectory:update()
   if self.trajectory:is_done() then
+    dbg_log("Enemy finished trajectory.")
     self.alive = false
     self.visible = false
     return

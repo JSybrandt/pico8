@@ -44,12 +44,24 @@ function interp1d(frac, min, max)
   return min + frac * delta
 end
 
-function copy(tbl)
-  copy = setmetatable({}, tbl)
+function shallow_copy(tbl)
+  local cpy = setmetatable({}, tbl)
   for k, v in pairs(tbl) do
-    copy[k] = v
+    cpy[k] = v
   end
-  return copy
+  return cpy
+end
+
+function deep_copy(tbl)
+  local cpy = setmetatable({}, tbl)
+  for k, v in pairs(tbl) do
+    if type(v) == "table" then
+      cpy[k] = deep_copy(v)
+    else
+      cpy[k] = v
+    end
+  end
+  return cpy
 end
 
 function merge(a, b)

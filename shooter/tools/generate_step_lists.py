@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
-"""Generates LUA code for trajectories.
+"""Generates LUA code for step lists.
 
 We want a display and an editable table.
 We also want a "to lua" button.
 
 
-We should see a 128x128 view of the trajectory, with a helpful animation.
+We should see a 128x128 view of the step list, with a helpful animation.
 
 
 """
@@ -111,7 +111,7 @@ class Actor:
 
 
 class App(tk.Tk):
-    """This helps us make trajectories."""
+    """This helps us make step lists."""
 
     def __init__(self):
         super().__init__()
@@ -168,7 +168,6 @@ class App(tk.Tk):
         self.draw_canvas()
 
         self.bind("<Delete>", self.delete_button_fn)
-        self.bind("w", self.wait_button_fn)
 
     def current_steps(self):
         return self.named_steps[self.name_var.get()]
@@ -191,7 +190,7 @@ class App(tk.Tk):
 
     def save_button_fn(self):
         file_path = filedialog.asksaveasfilename(
-            initialfile="paths.pkl", defaultextension=".pkl"
+            initialfile="step_lists.pkl", defaultextension=".pkl"
         )
         with open(file_path, "wb") as save_file:
             save_file.write(pickle.dumps(self.named_steps))
@@ -199,20 +198,20 @@ class App(tk.Tk):
     def export_button_fn(self):
         """Exports the steps in lua format"""
         file_path = filedialog.asksaveasfilename(
-            initialfile="trajectory_export.p8", defaultextension=".p8"
+            initialfile="step_lists.p8", defaultextension=".p8"
         )
         with open(file_path, "w") as save_file:
-            var_name = "serialized_trajectories"
+            var_name = "serialized_step_lists"
             save_file.write(f"{var_name} = {{}}\n")
-            for traj_name, steps in self.named_steps.items():
+            for name, steps in self.named_steps.items():
                 if len(steps) == 0:
                     continue
-                serialized_traj = ";".join([str(s) for s in steps])
-                save_file.write(f'{var_name}["{traj_name}"] = "{serialized_traj}"\n')
+                serialized_list = ";".join([str(s) for s in steps])
+                save_file.write(f'{var_name}["{name}"] = "{serialized_list}"\n')
 
     def load_button_fn(self):
         file_path = filedialog.askopenfilename(
-            initialfile="paths.pkl", defaultextension=".pkl"
+            initialfile="step_lists.pkl", defaultextension=".pkl"
         )
         with open(file_path, "rb") as load_file:
             self.named_steps = pickle.loads(load_file.read())
@@ -302,9 +301,13 @@ class App(tk.Tk):
     def draw_grid(self):
         """Draws a square grid."""
         for x in range(0, self.canvas_px, self.grid_px):
-            self.canvas.create_line(x, 0, x, self.canvas_px, fill=self.get_grid_fill(x), width=1)
+            self.canvas.create_line(
+                x, 0, x, self.canvas_px, fill=self.get_grid_fill(x), width=1
+            )
         for y in range(0, self.canvas_px, self.grid_px):
-            self.canvas.create_line(0, y, self.canvas_px, y, fill=self.get_grid_fill(y), width=1)
+            self.canvas.create_line(
+                0, y, self.canvas_px, y, fill=self.get_grid_fill(y), width=1
+            )
 
     def draw_game_border(self):
         """Draws a thick rectangle around the game viewscreen."""

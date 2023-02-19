@@ -41,12 +41,25 @@ function _v2:__tostring()
 end
 
 function _v2:norm()
-  return sqrt(self.x^2 + self.y^2)
+  -- because we're squaring, we need to check for overflows.
+  local x2 = self.x^2
+  -- overflow check
+  if x2 < 0 then return _max_num end
+  local y2 = self.y^2
+  -- overflow check
+  if y2 < 0 then return _max_num end
+  -- overflow check
+  local sum2 = x2 + y2
+  if sum2 < 0 then return _max_num end
+  return sqrt(sum2)
 end
 
 function _v2:unit()
   if self.x == 0 and self.y == 0 then return _v2(0,0) end
-  return self / self:norm()
+  -- sometimes, we will have large vectors that could overflow our tiny ints
+  -- so we will prematurely divide our vectors by a constant factor
+  local v = self / 100
+  return v / v:norm()
 end
 
 function _v2:dot(other)

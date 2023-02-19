@@ -18,6 +18,7 @@ function _trajectory:__call(actor, steps)
   local t = inherit({}, _trajectory)
   t.actor = actor
   t.steps = steps
+  dbg_log("new traj with ", #t.steps, " steps")
   t.curr_step_idx = 1
   t.curr_counter = 0
   return t
@@ -58,6 +59,7 @@ function _trajectory:update()
 end
 
 function _trajectory:update_jump()
+  dbg_log("Jumping...")
   local step = self:curr_step()
   assert(step.pos)
   self.actor.pos = step.pos
@@ -66,10 +68,13 @@ end
 
 function _trajectory:update_move()
   local step = self:curr_step()
+  dbg_log("Moving...", self.actor.pos, step.pos, step.speed)
   assert(step.pos)
   assert(step.speed)
   local dir = (step.pos - self.actor.pos):unit()
+  dbg_log("dir:",dir)
   self.actor.pos += dir * step.speed
+  dbg_log("new actor pos: ", self.actor.pos)
   if (self.actor.pos - step.pos):norm() < step.speed then self:finish_step() end
 end
 
@@ -92,3 +97,27 @@ function _trajectory:finish_step()
   self.curr_counter = 0
 end
 
+function flip_step_list(steps)
+  local new_steps = {}
+  for s in all(steps) do
+    local cpy = deep_copy(s)
+    if cpy.pos ~= nil then
+      dbg_log(cpy.pos)
+      cpy.pos.x = _width - cpy.pos.x
+    end
+    add(new_steps, cpy)
+  end
+  return new_steps
+end
+
+function translate_step_list(steps, offset)
+  local new_steps = {}
+  for s in all(steps) do
+    local cpy = deep_copy(s)
+    if cpy.pos ~= nil then
+      cpy.pos += offset
+    end
+    add(new_steps, cpy)
+  end
+  return new_steps
+end

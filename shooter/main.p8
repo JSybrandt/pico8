@@ -5,22 +5,22 @@ function _init()
   add(players, _player(0))
   add(players, _player(1))
 
-  -- load all of the trajectories that we exported.
-  trajectories = {}
-  for name, serialized_traj in pairs(serialized_trajectories) do
-      trajectories[name] = parse_trajectory_steps(serialized_traj)
+  -- load all of the step_lists that we exported.
+  step_lists = {}
+  for name, serialized_step_list in pairs(serialized_step_lists) do
+      step_lists[name] = parse_trajectory_steps(serialized_step_list)
   end
-  traj_names = {}
-  for name, _ in pairs(trajectories) do
-      add(traj_names, name)
+  step_list_names = {}
+  for name, _ in pairs(step_lists) do
+      add(step_list_names, name)
   end
 
   enemies = {}
   enemy_bullets = {}
 end
 
-function rand_traj()
-    return trajectories[rnd(traj_names)]
+function rand_step_list()
+    return step_lists[rnd(step_list_names)]
 end
 
 function _draw()
@@ -28,12 +28,18 @@ function _draw()
   foreach(players, _player.draw)
   foreach(enemies, _spr_actor.draw)
   foreach(enemy_bullets, _bullet.draw)
+  print(#enemies)
+  print(#enemy_bullets)
+  print(#players)
 end
 
 function _update()
+  local a = step_lists["sweep"]
+  local b = flip_step_list(a)
+  local c = translate_step_list(a, _v2(32, 0))
   if t() % 1 == 0 then
     add(enemies, _enemy({
-      steps = rand_traj(),
+      steps = tern(t() % 2 == 0, b, c),
       health = 10,
       bullets = enemy_bullets,
       shot_interval = 60,
@@ -47,6 +53,7 @@ function _update()
   check_enemy_player_collisions()
   check_enemy_bullet_player_collisions()
   filter(enemies, is_alive)
+  filter(enemy_bullets, is_alive)
   filter(players, is_alive)
 end
 
