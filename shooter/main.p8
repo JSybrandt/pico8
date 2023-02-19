@@ -38,8 +38,13 @@ function _update()
   local b = flip_step_list(a)
   local c = translate_step_list(a, _v2(32, 0))
   if t() % 1 == 0 then
+    local count = t() % 10
+    local steps = translate_step_list(step_lists["downward"], _v2(count*5, 0))
+    if count > 5 then
+      steps = flip_step_list(steps)
+    end
     add(enemies, _enemy({
-      steps = tern(t() % 2 == 0, b, c),
+      steps = steps,
       health = 10,
       bullets = enemy_bullets,
       shot_interval = 60,
