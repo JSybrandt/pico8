@@ -289,12 +289,22 @@ class App(tk.Tk):
                 self.draw_arrow(last_pos, step.pos, dashed=isinstance(step, JumpStep))
             last_pos = step.pos
 
+    def get_grid_fill(self, val):
+        val -= self.game_grid_margin_size * self.grid_px
+        if val % 64 == 0:
+            return "BLUE"
+        if val % 32 == 0:
+            return "GREEN"
+        if val % 16 == 0:
+            return "RED"
+        return "BLACK"
+
     def draw_grid(self):
         """Draws a square grid."""
         for x in range(0, self.canvas_px, self.grid_px):
-            self.canvas.create_line(x, 0, x, self.canvas_px)
+            self.canvas.create_line(x, 0, x, self.canvas_px, fill=self.get_grid_fill(x), width=1)
         for y in range(0, self.canvas_px, self.grid_px):
-            self.canvas.create_line(0, y, self.canvas_px, y)
+            self.canvas.create_line(0, y, self.canvas_px, y, fill=self.get_grid_fill(y), width=1)
 
     def draw_game_border(self):
         """Draws a thick rectangle around the game viewscreen."""
@@ -305,7 +315,7 @@ class App(tk.Tk):
             margin_px,
             game_px + margin_px,
             game_px + margin_px,
-            width=4,
+            width=5,
             outline="grey",
         )
 
