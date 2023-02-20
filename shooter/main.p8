@@ -4,7 +4,7 @@ function _init()
   players = {}
   player_bullets = {}
   add(players, _player(0, player_bullets))
-  add(players, _player(1, player_bullets))
+  -- add(players, _player(1, player_bullets))
 
   enemies = {}
   enemy_bullets = {}
@@ -19,6 +19,10 @@ function _draw()
   foreach(players, _player.draw)
   foreach(enemies, _spr_actor.draw)
   foreach(enemy_bullets, _bullet.draw)
+
+  print("# enemies: "..#enemies, _yellow)
+  print("# enemy bullets: "..#enemy_bullets, _yellow)
+  print("# player bullets: "..#player_bullets, _yellow)
 end
 
 function _update()
@@ -29,8 +33,8 @@ function _update()
   foreach(enemy_bullets, _bullet.update)
 
   check_actor_point_collisions(enemies, player_bullets, enemy_player_bullet_callback)
+  check_actor_point_collisions(players, enemy_bullets, player_enemy_bullet_callback)
   check_actor_actor_collisions(enemies, players, enemy_player_callback)
-  check_actor_actor_collisions(enemy_bullets, players, enemy_bullet_player_callback)
 
   filter(enemies, is_alive)
   filter(enemy_bullets, is_alive)
@@ -45,11 +49,11 @@ end
 
 function enemy_player_callback(enemy, player)
   enemy:damage()
-  player:damage()
+  -- player:damage()
 end
 
-function enemy_bullet_player_callback(enemy_bullet, player)
+function player_enemy_bullet_callback(player, enemy_bullet)
   enemy_bullet.alive = false
-  player:damage()
+  -- player:damage()
 end
 

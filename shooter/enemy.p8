@@ -39,7 +39,7 @@ function _enemy:spawn_bullet()
     pos = self.pos,
     vel = _enemy_bullet_vel,
     color = _enemy_bullet_color,
-    width = 3,
-    height = 3,
+    width = 2,
+    height = 2,
   }))
 end

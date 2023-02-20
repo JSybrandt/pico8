@@ -9,7 +9,7 @@ function _wave_spawner:__call(params)
   w.enemies = params.enemies
   w.enemy_bullets = params.enemy_bullets
   w.waves = {}
-  w.wave_number = 0
+  w.wave_number = 50
   -- load all of the step_lists that we exported to step_lists.p8
   w.step_lists = {}
   for name, serialized_step_list in pairs(serialized_step_lists) do
@@ -52,7 +52,7 @@ function _wave:__call(params)
   w.enemies = params.enemies
   w.enemy_bullets = params.enemy_bullets
   w.wave_number = params.wave_number
-  w.num_enemies = min(8, ceil(w.wave_number / 2))
+  w.num_enemies = w.wave_number
   w.enemy_count = 0
   w.step_list = params.step_list
   w.flipped_list= flip_step_list(w.step_list)
@@ -71,7 +71,7 @@ end
 function _wave:spawn_enemy()
   self.enemy_count += 1
   add(self.enemies, _enemy({steps=tern(self.enemy_count % 2 == 0, self.step_list, self.flipped_list),
-                            health=10,
+                            health=5,
                             bullets = self.enemy_bullets,
-                            shot_interval = 60}))
+                            shot_interval = interp1d(rnd(), 30, 60)}))
 end
