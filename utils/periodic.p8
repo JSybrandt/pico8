@@ -18,3 +18,8 @@ function _periodic:update()
     self.counter = 0
   end
 end
+
+function _periodic:set_interval(interval)
+  self.counter = 0
+  self.interval = interval
+end
