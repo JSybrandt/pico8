@@ -10,7 +10,7 @@ function  _aabb:__call(pos, size)
 end
 
 function _aabb:from_ltrb(left, top, right, bottom)
-  return _aabb(_vec2(left, top), _vec2(right-left, bottom-top))
+  return _aabb(_v2(left, top), _v2(right-left, bottom-top))
 end
 
 function _aabb:left() return self.pos.x end
@@ -22,10 +22,10 @@ function _aabb:height() return self.size.y end
 function _aabb:center() return self.pos + self.size / 2 end
 
 function _aabb:corners()
-  return {_vec2(self:left(), self:top()),
-          _vec2(self:left(), self:bottom()),
-          _vec2(self:right(), self:bottom()),
-          _vec2(self:right(), self:top())}
+  return {_v2(self:left(), self:top()),
+          _v2(self:left(), self:bottom()),
+          _v2(self:right(), self:bottom()),
+          _v2(self:right(), self:top())}
 end
 
 function _aabb:edges()
@@ -84,7 +84,7 @@ end
 
 function _aabb:corner_in_dir(dir)
   assert(dir)
-  return _vec2(
+  return _v2(
     ternary(dir.x>0, self:right(), self:left()),
     ternary(dir.y>0, self:bottom(), self:top()))
 end

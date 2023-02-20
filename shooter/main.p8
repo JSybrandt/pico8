@@ -2,8 +2,9 @@
 
 function _init()
   players = {}
-  add(players, _player(0))
-  add(players, _player(1))
+  player_bullets = {}
+  add(players, _player(0, player_bullets))
+  add(players, _player(1, player_bullets))
 
   enemies = {}
   enemy_bullets = {}
@@ -23,49 +24,32 @@ end
 function _update()
   wave_spawner:update()
   foreach(players, _player.update)
+  foreach(player_bullets, _bullet.update)
   foreach(enemies, _enemy.update)
   foreach(enemy_bullets, _bullet.update)
 
-  check_bullet_enemy_collisions()
-  check_enemy_player_collisions()
-  check_enemy_bullet_player_collisions()
+  check_actor_point_collisions(enemies, player_bullets, enemy_player_bullet_callback)
+  check_actor_actor_collisions(enemies, players, enemy_player_callback)
+  check_actor_actor_collisions(enemy_bullets, players, enemy_bullet_player_callback)
+
   filter(enemies, is_alive)
   filter(enemy_bullets, is_alive)
+  filter(player_bullets, is_alive)
   filter(players, is_alive)
 end
 
-function check_bullet_enemy_collisions()
-  for player in all(players) do
-    for bullet in all(player.bullets) do
-      local bb = bullet:aabb()
-      for enemy in all(enemies) do
-        if enemy:aabb():overlaps(bb) then
-          enemy:damage()
-          bullet.alive = false
-        end
-      end
-    end
-  end
+function enemy_player_bullet_callback(enemy, player_bullet)
+  enemy:damage()
+  player_bullet.alive = false
 end
 
-function check_enemy_player_collisions()
-  for player in all(players) do
-    local pbb = player:aabb()
-    for enemy in all(enemies) do
-      if enemy:aabb():overlaps(pbb) then
-        player:damage()
-      end
-    end
-  end
+function enemy_player_callback(enemy, player)
+  enemy:damage()
+  player:damage()
 end
 
-function  check_enemy_bullet_player_collisions()
-  for player in all(players) do
-    local pbb = player:aabb()
-    for bullet in all(enemy_bullets) do
-      if bullet:aabb():overlaps(pbb) then
-        player:damage()
-      end
-    end
-  end
+function enemy_bullet_player_callback(enemy_bullet, player)
+  enemy_bullet.alive = false
+  player:damage()
 end
+

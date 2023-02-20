@@ -1,13 +1,13 @@
 _player = {}
 setmetatable(_player, _player)
 
-function _player:__call(idx)
+function _player:__call(idx, player_bullets)
   local p = inherit(_player, _spr_actor({
     spr = _player_spr,
     pos = _v2(_width/2, _height*0.9),
   }))
   p.idx = idx or 0
-  p.bullets = {}
+  p.bullets = player_bullets
   p.power_level = 1
   p.shoot_counter = 0
   p.shoot_fns = {}
@@ -130,8 +130,6 @@ function _player:update()
   self:keep_on_screen()
 
   self.spawn_bullet_periodic:update()
-  foreach(self.bullets, _bullet.update)
-  filter(self.bullets, is_alive)
 end
 
 function _player:draw()

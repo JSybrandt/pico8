@@ -10,6 +10,7 @@ __lua__
 #include utils/periodic.p8
 #include utils/actor.p8
 #include utils/spr_actor.p8
+#include utils/collisions.p8
 
 #include tools/step_lists.p8
 
