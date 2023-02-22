@@ -37,7 +37,7 @@ function __fill_flat_bot_tri(a,b,c,color)
 end
 
 function trifill_v2(a, b, c, color)
-  local a,b,c = unpack(insertion_sort({a, b, c}, function(x) return x.y end))
+  local a,b,c = unpack(sort({a, b, c}, function(x) return x.y end))
   -- a is the highest, c is the lowest point
   if a == b then
     return __fill_flat_top_tri(a,b,c,color)
@@ -46,11 +46,11 @@ function trifill_v2(a, b, c, color)
     return __fill_flat_bot_tri(a,b,c,color)
   end
   -- split the triangle in half with a horizontal line from b to d.
-  local d = _vec2(a.x + (b.y - a.y) / (c.y - a.y) * (c.x - a.x), b.y)
+  local d = _v2(a.x + (b.y - a.y) / (c.y - a.y) * (c.x - a.x), b.y)
   __fill_flat_top_tri(a,b,d,color)
   __fill_flat_bot_tri(d,b,c,color)
 end
 
 function trifill(x1,y1,x2,y2,x3,y3,color)
-  return trifill_v2(_vec2(x1,y1), _vec2(x2,y2), _vec2(x3,y3), color)
+  return trifill_v2(_v2(x1,y1), _v2(x2,y2), _v2(x3,y3), color)
 end

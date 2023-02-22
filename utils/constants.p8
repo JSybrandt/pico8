@@ -40,3 +40,7 @@ _eps = 0.001
 -- data
 _min_num = 0x8000.0000
 _max_num = 0x7fff.ffff
+
+-- players
+_p1 = 0
+_p2 = 1

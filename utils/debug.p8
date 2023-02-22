@@ -1,7 +1,7 @@
 -- debug --
 
 -- set to true to enable debugging
---_debugging = true
+-- _debugging = true
 _debug_logfile = "logs.txt"
 
 -- prepare the debug environment.
