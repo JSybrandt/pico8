@@ -9,16 +9,7 @@ function _wave_spawner:__call(params)
   w.enemies = params.enemies
   w.enemy_bullets = params.enemy_bullets
   w.waves = {}
-  w.wave_number = 50
-  -- load all of the step_lists that we exported to step_lists.p8
-  w.step_lists = {}
-  for name, serialized_step_list in pairs(serialized_step_lists) do
-      w.step_lists[name] = parse_trajectory_steps(serialized_step_list)
-  end
-  w.step_list_names = {}
-  for name, _ in pairs(w.step_lists) do
-      add(w.step_list_names, name)
-  end
+  w.wave_number = 0
   w.new_wave_periodic = _periodic(_wave_spawner_interval,
                                   function() w:start_new_wave() end)
   return w
@@ -40,8 +31,7 @@ function _wave_spawner:start_new_wave()
   self.wave_number += 1
   add(self.waves, _wave({enemies = self.enemies,
                          enemy_bullets = self.enemy_bullets,
-                         wave_number = self.wave_number,
-                         step_list = self:rnd_step_list()}))
+                         wave_number = self.wave_number}))
 end
 
 _wave = {}
@@ -54,8 +44,7 @@ function _wave:__call(params)
   w.wave_number = params.wave_number
   w.num_enemies = w.wave_number
   w.enemy_count = 0
-  w.step_list = params.step_list
-  w.flipped_list= flip_step_list(w.step_list)
+  w.enemy_idx = w.wave_number
   w.alive = true
   local spawn_timer = _wave_alive_time / w.num_enemies
   w.spawn_periodic = _periodic(spawn_timer, function() w:spawn_enemy() end)
@@ -70,8 +59,6 @@ end
 
 function _wave:spawn_enemy()
   self.enemy_count += 1
-  add(self.enemies, _enemy({steps=tern(self.enemy_count % 2 == 0, self.step_list, self.flipped_list),
-                            health=5,
-                            bullets = self.enemy_bullets,
-                            shot_interval = interp1d(rnd(), 30, 60)}))
+  add(self.enemies, _enemy({enemy_idx = self.enemy_idx,
+                            bullets = self.enemy_bullets}))
 end

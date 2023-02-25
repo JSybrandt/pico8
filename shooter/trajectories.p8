@@ -115,3 +115,15 @@ function translate_step_list(steps, offset)
   end
   return new_steps
 end
+
+
+function load_serialized_step_lists()
+  local step_lists = {}
+  local serialized_step_list = serialized_step_list or {}
+  for name, serialized_step_list in pairs(serialized_step_lists) do
+      step_lists[name] = parse_trajectory_steps(serialized_step_list)
+  end
+  return step_lists
+end
+
+_step_lists = load_serialized_step_lists()

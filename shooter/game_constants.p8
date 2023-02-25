@@ -28,9 +28,10 @@ _player_shoot_l5_roffset = 4
 _player_shoot_l5_vel_l_delta = -1
 _player_shoot_l5_vel_r_delta = 1
 
-_enemy_spr_1 = 2
-_enemy_bullet_vel = _v2(0, 1.75)
-_enemy_bullet_color = _red
+_enemy_spr_start = 2
+_enemy_spr_end = 17
 
 _wave_spawner_interval= 5 * 30
 _wave_alive_time = 5 * 30
+
+

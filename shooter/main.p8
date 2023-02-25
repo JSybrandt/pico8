@@ -16,13 +16,9 @@ end
 
 function _draw()
   cls()
-  foreach(players, _player.draw)
-  foreach(enemies, _spr_actor.draw)
+  foreach(enemies, _enemy.draw)
   foreach(enemy_bullets, _bullet.draw)
-
-  print("# enemies: "..#enemies, _yellow)
-  print("# enemy bullets: "..#enemy_bullets, _yellow)
-  print("# player bullets: "..#player_bullets, _yellow)
+  foreach(players, _player.draw)
 end
 
 function _update()
@@ -49,11 +45,11 @@ end
 
 function enemy_player_callback(enemy, player)
   enemy:damage()
-  -- player:damage()
+  player:damage()
 end
 
 function player_enemy_bullet_callback(player, enemy_bullet)
   enemy_bullet.alive = false
-  -- player:damage()
+  player:damage()
 end
 

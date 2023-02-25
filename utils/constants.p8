@@ -26,6 +26,24 @@ _lavender = 13
 _pink = 14
 _light_peach = 15
 
+_colors = {}
+add(_colors, _black)
+add(_colors, _dark_blue)
+add(_colors, _dark_purple)
+add(_colors, _dark_green)
+add(_colors, _brown)
+add(_colors, _dark_grey)
+add(_colors, _light_grey)
+add(_colors, _white)
+add(_colors, _red)
+add(_colors, _orange)
+add(_colors, _yellow)
+add(_colors, _green)
+add(_colors, _blue)
+add(_colors, _lavender)
+add(_colors, _pink)
+add(_colors, _light_peach)
+
 -- buttons
 _left = 0
 _right = 1
