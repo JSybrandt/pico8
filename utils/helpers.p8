@@ -96,3 +96,47 @@ function screen_aabb()
 end
 
 function is_alive(a) return a.alive end
+
+function round(a)
+  if a%1>0.5 then
+    return ceil(a)
+  else
+    return flr(a)
+  end
+end
+
+function sign(a) if a < 0 then return -1 else return 1 end end
+
+-- float equals
+function approx(a, b)
+  if abs(a - b) < _eps then return true end
+  return false
+end
+
+function clip(a, l, h)
+  if a < l then
+    return l
+  end
+  if a > h then
+    return h
+  end
+  return a
+end
+
+function minimum(tbl, fn)
+  local min
+  for x in all(tbl) do
+    if fn then x = fn(x) end
+    if min == nil or x < min then min = x end
+  end
+  return min
+end
+
+function maximum(tbl, fn)
+  local max
+  for x in all(tbl) do
+    if fn then x = fn(x) end
+    if max == nil or x > max then max = x end
+  end
+  return max
+end

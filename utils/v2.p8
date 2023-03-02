@@ -70,9 +70,36 @@ function _v2:cross(other)
   return self.x*other.y - self.y*other.x
 end
 
+function _v2:flr()
+  return _v2(flr(self.x), flr(self.y))
+end
+
+function _v2:sign()
+  return _v2(sign(self.x), sign(self.y))
+end
+
+function _v2:abs()
+  return _v2(abs(self.x, abs(self.y)))
+end
+
+function _v2:ceil()
+  return _v2(ceil(self.x), ceil(self.y))
+end
+
+function _v2:round()
+  return _v2(round(self.x), round(self.y))
+end
+
 function _v2:pset(color)
   local color = color or _green
   pset(self.x, self.y, color)
+end
+
+function _v2:rotate(turns)
+  local sn = sin(turns)
+  local cn = cos(turns)
+  return _v2(self.x * cn - self.y * sn,
+             self.x * sn + self.y * cn)
 end
 
 -- v2 helpers

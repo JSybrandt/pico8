@@ -13,14 +13,29 @@ function _spr_actor:__call(params)
   a.height = a.spr_width * _spr_px_high
   a.flip_x = params.flip_x or false
   a.flip_y = params.flip_y or false
+  a.turns = params.turns or 0
+  a.scale = params.scale or 1
   return a
 end
+
+-- todo: modify aabb by scale
 
 function _spr_actor:draw(params)
   local params = params or {}
   if not self.visible then return end
-  local x  = self.pos.x - self.width/2
-  local y = self.pos.y - self.height/2
-  spr(self.spr, x, y, self.spr_width, self.spr_height, self.flip_x, self.flip_y)
+  draw_spr({spr=self.spr,
+            center=self.pos,
+            spr_width=self.spr_width,
+            spr_height=self.spr_height,
+            flip_x=self.flip_x,
+            flip_y=self.flip_y,
+            scale=self.scale,
+            turns=self.turns})
+
+  --local x  = self.pos.x - self.width/2
+  --local y = self.pos.y - self.height/2
+  --spr(self.spr, x, y, self.spr_width, self.spr_height, self.flip_x, self.flip_y)
+
+
   if _debugging then self:aabb():draw(params.dbg_color) end
 end

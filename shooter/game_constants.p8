@@ -2,7 +2,7 @@
 
 _fast_btn = _button_o
 
-_player_spr = 1
+_player_spr = 39
 _player_speed = 2
 _player_fast_speed = 5
 _player_bullet_vel = _v2(0, -3)

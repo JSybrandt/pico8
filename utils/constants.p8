@@ -7,6 +7,8 @@ _height = 128
 -- sprites
 _spr_px_wide = 8
 _spr_px_high = 8
+_spr_sheet_px_width = 128
+_spr_sheet_width = _spr_sheet_px_width / _spr_px_wide
 
 -- colors
 _black = 0

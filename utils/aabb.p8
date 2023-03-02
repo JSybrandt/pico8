@@ -13,6 +13,11 @@ function _aabb:from_ltrb(left, top, right, bottom)
   return _aabb(_v2(left, top), _v2(right-left, bottom-top))
 end
 
+function _aabb:from_centered(center, size)
+  local top_left = center - size/2
+  return _aabb(top_left, size)
+end
+
 function _aabb:left() return self.pos.x end
 function _aabb:top() return self.pos.y end
 function _aabb:bottom() return self.pos.y + self.size.y end
@@ -112,6 +117,16 @@ end
 function _aabb:oval_fill(color)
   local color = color or _green
   ovalfill(self:left(), self:top(), self:right(), self:bottom(), color)
+end
+
+-- returns 4 corners in a rotated box.
+function _aabb:rotate(turns)
+  local center = self:center()
+  local rotated_corners = {}
+  for corner in all(self:corners()) do
+    add(rotated_corners, (corner - center):rotate(turns) + center)
+  end
+  return rotated_corners
 end
 
 function _aabb:__tostring()

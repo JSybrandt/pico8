@@ -4,8 +4,8 @@ setmetatable(_player, _player)
 function _player:__call(idx, player_bullets)
   local p = inherit(_player, _spr_actor({
     spr = _player_spr,
-    pos = _v2(_width/2, _height*0.9),
-  }))
+    pos = _v2(_width*0.3, _height*0.9),
+    flip_y=true}))
   p.idx = idx or 0
   p.bullets = player_bullets
   p.power_level = 1
@@ -117,6 +117,9 @@ function _player:aabb()
 end
 
 function _player:update()
+  self.turns += 0.01
+  self.turns %= 1
+  self.scale = sin(t()*0.5)/2 + 8
   if not self.alive then return end
   if btnp(_button_o, self.idx) then
     self:level_up()
@@ -133,14 +136,15 @@ function _player:update()
 end
 
 function _player:draw()
-  _spr_actor.draw(self)
-  self:aabb():oval_fill(self:color())
+  pal(_white, self:color())
+  self.parent.draw(self)
+  pal()
   foreach(self.bullets, _bullet.draw)
 end
 
 function _player:color()
-  if self.idx == 0 then return _blue end;
-  if self.idx == 1 then return _green end;
+  if self.idx == _p1 then return _blue end;
+  if self.idx == _p2 then return _green end;
 end
 
 function _player:damage()
