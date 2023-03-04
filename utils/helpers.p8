@@ -98,7 +98,7 @@ end
 function is_alive(a) return a.alive end
 
 function round(a)
-  if a%1>0.5 then
+  if (a%1)>0.5 then
     return ceil(a)
   else
     return flr(a)
@@ -116,8 +116,7 @@ end
 function clip(a, l, h)
   if a < l then
     return l
-  end
-  if a > h then
+  elseif a > h then
     return h
   end
   return a

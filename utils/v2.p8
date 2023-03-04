@@ -8,37 +8,24 @@ function _v2:__call(x, y)
   return v
 end
 
-function _v2:__unm()
-  return _v2(-self.x, -self.y)
-end
+function _v2:__unm() return _v2(-self.x, -self.y) end
+function _v2:__add(other) return _v2(self.x+other.x, self.y+other.y) end
+function _v2:__sub(other) return _v2(self.x-other.x, self.y-other.y) end
+function _v2:__mul(scalar) return _v2(self.x*scalar, self.y*scalar) end
+function _v2:__div(scalar) return _v2(self.x/scalar, self.y/scalar) end
+function _v2:__mod(scalar) return _v2(self.x%scalar, self.y%scalar) end
+function _v2:__eq(other) return self.x == other.x and self.y == other.y end
+function _v2:__tostring() return "vec2("..tostring(self.x)..", "..tostring(self.y)..")" end
 
-function _v2:__add(other)
-  return _v2(self.x+other.x, self.y+other.y)
-end
+-- in place
+function _v2:addi(other) self.x += other.x; self.y += other.y end
+function _v2:subi(other) self.x -= other.x; self.y -= other.y end
+function _v2:muli(scalar) self.x *= scalar; self.y *= scalar end
+function _v2:divi(scalar) self.x /= scalar; self.y /= scalar end
+function _v2:flri() self.x = flr(self.x); self.y = flr(self.y) end
+function _v2:roundi() self.x = round(self.x); self.y = round(self.y) end
+function _v2:set(x, y) self.x = x; self.y = y end
 
-function _v2:__sub(other)
-  return _v2(self.x-other.x, self.y-other.y)
-end
-
-function _v2:__mul(scalar)
-  return _v2(self.x*scalar, self.y*scalar)
-end
-
-function _v2:__div(scalar)
-  return _v2(self.x/scalar, self.y/scalar)
-end
-
-function _v2:__mod(scalar)
-  return _v2(self.x%scalar, self.y%scalar)
-end
-
-function _v2:__eq(other)
-  return self.x == other.x and self.y == other.y
-end
-
-function _v2:__tostring()
-  return "vec2("..self.x..", "..self.y..")"
-end
 
 function _v2:norm()
   -- because we're squaring, we need to check for overflows.
@@ -102,6 +89,19 @@ function _v2:rotate(turns)
              self.x * sn + self.y * cn)
 end
 
+function _v2:rotatei(turns)
+  local sn = sin(turns)
+  local cn = cos(turns)
+  local x = self.x * cn - self.y * sn
+  local y = self.x * sn + self.y * cn
+  self.x = x; self.y = y
+end
+
+function _v2:rotateics(cn, sn)
+  local x = self.x * cn - self.y * sn
+  local y = self.x * sn + self.y * cn
+  self.x = x; self.y = y
+end
 -- v2 helpers
 
 function rnd_v2()

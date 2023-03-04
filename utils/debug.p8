@@ -1,7 +1,7 @@
 -- debug --
 
 -- set to true to enable debugging
--- _debugging = true
+_debugging = true
 _debug_logfile = "logs.txt"
 
 -- prepare the debug environment.
@@ -19,4 +19,13 @@ function dbg_log(...)
     msg = msg.." "..tostring(arg)
   end
   printh(msg, _debug_logfile)
+end
+
+function profile(name, fn)
+  local start_stat = stat(1)
+  fn()
+  local time = stat(1) - start_stat
+  if not _debugging then return end
+  print(name..": "..time, _white)
+  printh(time, name..".profile.txt")
 end

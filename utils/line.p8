@@ -2,71 +2,51 @@ _line = {}
 setmetatable(_line, _line)
 
 function _line:__call(head, tail)
-  assert(head)
-  assert(head.x)
-  assert(head.y)
-  assert(tail)
-  assert(tail.x)
-  assert(tail.y)
   local instance = inherit({}, _line)
   instance.head=head
   instance.tail=tail
   return instance
 end
 
+function _line:__tostring() return "_line("..tostring(self.head)..", "..tostring(self.tail)..")" end
+
 function _line:delta() return self.tail - self.head end
 
 function _line:top()
-  if self.head.y < self.tail.y then
-    return self.head.y
-  else
-    return self.tail.y
-  end
+  if self.head.y < self.tail.y then return self.head.y
+  else return self.tail.y end
 end
 
 function _line:bottom()
-  if self.head.y < self.tail.y then
-    return self.tail.y
-  else
-    return self.head.y
-  end
+  if self.head.y < self.tail.y then return self.tail.y
+  else return self.head.y end
 end
 
 function _line:left()
-  if self.head.x < self.tail.x then
-    return self.head.x
-  else
-    return self.tail.x
-  end
+  if self.head.x < self.tail.x then return self.head.x
+  else return self.tail.x end
 end
 
 function _line:right()
-  if self.head.x < self.tail.x then
-    return self.tail.x
-  else
-    return self.head.x
-  end
+  if self.head.x < self.tail.x then return self.tail.x
+  else return self.head.x end
 end
 
 -- calls fn(x, y) for all x, y screen coords covered by the line.
 function _line:visit_raster_points(fn)
-  local x0 = flr(self.head.x)
-  local y0 = flr(self.head.y)
-  local x1 = flr(self.tail.x)
-  local y1 = flr(self.tail.y)
-  local dx = abs(x1 - x0)
-  local sx = tern(x0 < x1, 1, -1)
-  local dy = -abs(y1 - y0)
-  local sy = tern(y0 < y1, 1, -1)
-  local err = dx + dy
+  local x0, y0, x1, y1, dx, sx, dy, sy, err
+  x0 = flr(self.head.x); y0 = flr(self.head.y)
+  x1 = flr(self.tail.x); y1 = flr(self.tail.y)
+  dx = abs(self.head.x- self.tail.x); dy = -abs(self.head.y - self.tail.y)
+  sx = tern(x0 < x1, 1, -1); sy = tern(y0 < y1, 1, -1)
+  err = dx + dy
   while true do
     fn(x0, y0)
     if x0 == x1 and y0 == y1 then break end
     local err2 = err * 2
     if err2 >= dy then
       if x0 == x1 then break end
-      err += dy
-      x0 += sx
+      err += dy; x0 += sx
     end
     if err2 <= dx then
       if y0 == y1 then break end

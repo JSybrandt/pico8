@@ -5,7 +5,8 @@ function _player:__call(idx, player_bullets)
   local p = inherit(_player, _spr_actor({
     spr = _player_spr,
     pos = _v2(_width*0.3, _height*0.9),
-    flip_y=true}))
+    flip_x=false,
+    flip_y=false}))
   p.idx = idx or 0
   p.bullets = player_bullets
   p.power_level = 1
@@ -119,7 +120,7 @@ end
 function _player:update()
   self.turns += 0.01
   self.turns %= 1
-  self.scale = sin(t()*0.5)/2 + 8
+  self.scale = (sin(t()*0.5) + 2.25)
   if not self.alive then return end
   if btnp(_button_o, self.idx) then
     self:level_up()
@@ -137,7 +138,7 @@ end
 
 function _player:draw()
   pal(_white, self:color())
-  self.parent.draw(self)
+  profile("player_draw", function() self.parent.draw(self) end)
   pal()
   foreach(self.bullets, _bullet.draw)
 end
