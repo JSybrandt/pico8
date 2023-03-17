@@ -32,6 +32,7 @@ function _line:right()
   else return self.head.x end
 end
 
+
 -- calls fn(x, y) for all x, y screen coords covered by the line.
 function _line:visit_raster_points(fn)
   local x0, y0, x1, y1, dx, sx, dy, sy, err

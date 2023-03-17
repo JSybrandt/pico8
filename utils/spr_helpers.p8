@@ -1,7 +1,7 @@
 -- spr_helpers --
 
--- draws a sprite, rotated at the center point
-function draw_spr(params)
+-- calls 'fn(x,y,c)' for each scaled and rotated coord.
+function visit_raster_spr(params)
   assert(params)
   local spr_idx = params.spr ; assert(spr)
   local center = params.center ; assert(center)
@@ -9,6 +9,7 @@ function draw_spr(params)
   local turns = params.turns or 0
   local spr_width = params.spr_width or 1
   local spr_height = params.spr_height or 1
+  local fn = params.fn
 
   local lines = rotated_rect_edges(
     center, --[[width--]]spr_width*_spr_px_wide*scale,
@@ -63,7 +64,7 @@ function draw_spr(params)
       elseif npy > spr_b then npy = spr_b end
 
       -- actually draw a sprite!
-      pset(x, y, sget(npx, npy))
+      fn(x, y, sget(npx, npy))
       -- move px by the increment
       px += pdx; py += pdy
     end
@@ -85,4 +86,29 @@ function rotated_rect_edges(center, width, height, turns)
   rb = _v2(flr((( hw)*cn-( hh)*sn)+cx),
            flr((( hw)*sn+( hh)*cn)+cy))
   return {_line(lt, lb), _line(lb, rb), _line(rb, rt), _line(rt, lt)}
+end
+
+-- draws a sprite, rotated at the center point
+function draw_spr(params)
+  assert(params)
+  local spr_idx = params.spr ; assert(spr)
+  local center = params.center ; assert(center)
+  local scale = params.scale or 1
+  local turns = params.turns % 1 or 0
+  local spr_width = params.spr_width or 1
+  local spr_height = params.spr_height or 1
+  local flip_x = params.flip_x or false
+  local flip_y = params.flip_y or false
+
+  if scale == 1 and turns == 0 then
+    local px_width = spr_width * _spr_px_high
+    local px_height = spr_height* _spr_px_high
+    local x  = center.x - px_width/2
+    local y = center.y - px_height/2
+    spr(spr_idx, x, y, spr_width, spr_height, flip_x, flip_y)
+    return
+  end
+
+  params.fn = pset
+  visit_raster_spr(params)
 end

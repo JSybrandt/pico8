@@ -32,10 +32,5 @@ function _spr_actor:draw(params)
             scale=self.scale,
             turns=self.turns})
 
-  --local x  = self.pos.x - self.width/2
-  --local y = self.pos.y - self.height/2
-  --spr(self.spr, x, y, self.spr_width, self.spr_height, self.flip_x, self.flip_y)
-
-
   if _debugging then self:aabb():draw(params.dbg_color) end
 end

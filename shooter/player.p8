@@ -118,9 +118,6 @@ function _player:aabb()
 end
 
 function _player:update()
-  self.turns += 0.01
-  self.turns %= 1
-  self.scale = (sin(t()*0.5) + 2.25)
   if not self.alive then return end
   if btnp(_button_o, self.idx) then
     self:level_up()

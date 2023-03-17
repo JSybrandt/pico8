@@ -27,6 +27,7 @@ function _enemy:__call(params)
   e.spawn_bullet_periodic = _periodic(details.bullet_interval,
                                       function() e:spawn_bullet() end)
   e.damaged_last_frame = false
+  e.delta_pos = _v2()
   return e
 end
 
@@ -41,7 +42,12 @@ function _enemy:spawn_bullet_downward()
 end
 
 function _enemy:update()
+  local old_pos = shallow_copy(self.pos)
   self.trajectory:update()
+  self.delta_pos = self.pos - old_pos
+  if self.delta_pos:l1() > 0 then
+    self.turns = self.delta_pos:atan2() + 0.25
+  end
   if self.trajectory:is_done() then
     self.alive = false
     self.visible = false

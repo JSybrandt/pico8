@@ -41,12 +41,20 @@ function _v2:norm()
   return sqrt(sum2)
 end
 
+function _v2:l1()
+  return abs(self.x) + abs(self.y)
+end
+
 function _v2:unit()
   if self.x == 0 and self.y == 0 then return _v2(0,0) end
   -- sometimes, we will have large vectors that could overflow our tiny ints
   -- so we will prematurely divide our vectors by a constant factor
   local v = self / 100
   return v / v:norm()
+end
+
+function _v2:atan2()
+  return atan2(self.x, self.y)
 end
 
 function _v2:dot(other)
