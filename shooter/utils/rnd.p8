@@ -8,5 +8,5 @@ function rnd_bool(frac)
 end
 
 function rnd_choose(tbl)
-  return tbl[flr(rnd_unit() * #tbl + 1)]
+  return tbl[flr(rnd01() * #tbl + 1)]
 end
