@@ -11,6 +11,18 @@ function _set:__call(values)
   return inst
 end
 
+function _set:__tostring()
+  local result = ""
+  for key in pairs(self.values) do
+    if result == "" then
+      result = tostring(key)
+    else
+      result = result..", "..tostring(key)
+    end
+  end
+  return "{"..result.."}"
+end
+
 function _set:contains(key)
   return self.values[key] == true
 end
@@ -45,7 +57,11 @@ function _set:union(other)
 end
 
 function _set:__len()
-  return #self.values
+  local size = 0
+  for _ in pairs(self.values) do
+    size += 1
+  end
+  return size
 end
 
 function _set:to_list()

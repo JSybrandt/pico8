@@ -2,7 +2,7 @@
 function _init()
   cls()
   generator = _wfc_generator({
-    sprites={1,2,3,4,5,6,7,8,9},
+    sprites={1,2,3,17,18,19,33,34,35},
     width=_width/_spr_px_wide,
     height=_height/_spr_px_high,
   })
@@ -12,6 +12,8 @@ end
 function _draw()
   cls()
   generator:draw()
+  extcmd("screen")
+  stop()
 end
 
 function _update()
